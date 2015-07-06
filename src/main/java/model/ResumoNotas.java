@@ -2,10 +2,10 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +67,7 @@ public class ResumoNotas {
 	}
 	
 	public static void calculaNotas() throws SQLException {
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
 		DriverConnection driver = new DriverConnection();
 		PreparedStatement stQuery = null;
 		PreparedStatement stInsert = null;
@@ -88,9 +89,9 @@ public class ResumoNotas {
 			
 			while (!rs.wasNull() && rs.next()) {
 				stInsert = (PreparedStatement) conn.prepareStatement(insert);
-				stInsert.setFloat(1, rs.getFloat("maior"));
-				stInsert.setFloat(2, rs.getFloat("menor"));
-				stInsert.setFloat(3, rs.getFloat("media"));
+				stInsert.setFloat(1, Float.valueOf(twoDForm.format(rs.getFloat("maior"))));
+				stInsert.setFloat(2, Float.valueOf(twoDForm.format(rs.getFloat("menor"))));
+				stInsert.setFloat(3, Float.valueOf(twoDForm.format(rs.getFloat("media"))));
 				stInsert.setFloat(4, rs.getInt("disciplina_id"));
 				stInsert.setFloat(5, rs.getInt("curso_id"));
 				affected_rows += stInsert.executeUpdate();
@@ -150,7 +151,7 @@ public class ResumoNotas {
 		try {
 			driver.register();
 			conn = driver.getConnection();
-			String query = "SELECT * from resumo_notas where media = ?";
+			String query = "SELECT * from resumo_notas where abs(media-?) <= 1e-6";
 			stQuery = (PreparedStatement) conn.prepareStatement(query);
 			stQuery.setFloat(1, media);
 			rs = stQuery.executeQuery();

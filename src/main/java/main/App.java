@@ -50,7 +50,7 @@ public class App
 			System.out.println();
 			
 			System.out.println("****************** Letra C ******************");
-    		ResumoNotas.getCursosDisciplinasByNota(new Float("8.5"));
+    		ResumoNotas.getCursosDisciplinasByNota(new Float("8.57"));
     		System.out.println();
     		
     		System.out.println("****************** Letra D ******************");

@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.6.19-0ubuntu0.14.04.1 - (Ubuntu)
+-- Server version:               5.6.23-1~dotdeb.3 - (Debian)
 -- Server OS:                    debian-linux-gnu
--- HeidiSQL Version:             9.2.0.4953
+-- HeidiSQL Version:             9.2.0.4956
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `aluno` (
   PRIMARY KEY (`RA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
--- Dumping data for table ooj4.aluno: ~1 rows (approximately)
+-- Dumping data for table ooj4.aluno: ~4 rows (approximately)
 /*!40000 ALTER TABLE `aluno` DISABLE KEYS */;
 INSERT INTO `aluno` (`RA`, `nome`) VALUES
 	('1', 'Airon Wellington'),
@@ -50,12 +50,28 @@ CREATE TABLE IF NOT EXISTS `aluno_disciplina` (
 /*!40000 ALTER TABLE `aluno_disciplina` DISABLE KEYS */;
 INSERT INTO `aluno_disciplina` (`nota`, `RA`, `codigo_disciplina`) VALUES
 	(3.5, '1', 1),
+	(4.5, '1', 1),
+	(7.5, '1', 1),
+	(10, '1', 2),
+	(10, '1', 2),
 	(10, '1', 2),
 	(5, '2', 1),
+	(6, '2', 1),
+	(7, '2', 1),
 	(7, '2', 2),
+	(7.5, '2', 2),
+	(7.5, '2', 2),
+	(8, '3', 3),
+	(9, '3', 3),
 	(8, '3', 3),
 	(7.5, '3', 4),
+	(8.5, '3', 4),
+	(9.5, '3', 4),
 	(9.8, '4', 3),
+	(8.8, '4', 3),
+	(7.8, '4', 3),
+	(9.9, '4', 4),
+	(9.9, '4', 4),
 	(9.9, '4', 4);
 /*!40000 ALTER TABLE `aluno_disciplina` ENABLE KEYS */;
 
@@ -68,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `curso` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
--- Dumping data for table ooj4.curso: ~0 rows (approximately)
+-- Dumping data for table ooj4.curso: ~2 rows (approximately)
 /*!40000 ALTER TABLE `curso` DISABLE KEYS */;
 INSERT INTO `curso` (`id`, `nome`) VALUES
 	(1, 'Especialização em Engenharia de Software'),
@@ -84,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `disciplina` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
--- Dumping data for table ooj4.disciplina: ~0 rows (approximately)
+-- Dumping data for table ooj4.disciplina: ~4 rows (approximately)
 /*!40000 ALTER TABLE `disciplina` DISABLE KEYS */;
 INSERT INTO `disciplina` (`codigo`, `descricao`) VALUES
 	(1, 'Engenharia de Requisitos'),
@@ -97,15 +113,15 @@ INSERT INTO `disciplina` (`codigo`, `descricao`) VALUES
 -- Dumping structure for table ooj4.disciplina_curso
 DROP TABLE IF EXISTS `disciplina_curso`;
 CREATE TABLE IF NOT EXISTS `disciplina_curso` (
-  `codigo_disciplina` int(11) unsigned,
+  `codigo_disciplina` int(11) unsigned DEFAULT NULL,
   `id_curso` int(11) unsigned DEFAULT NULL,
   KEY `FK_disciplina_curso_disciplina` (`codigo_disciplina`),
   KEY `FK_disciplina_curso_curso` (`id_curso`),
-  CONSTRAINT `FK_disciplina_curso_disciplina` FOREIGN KEY (`codigo_disciplina`) REFERENCES `disciplina` (`codigo`),
-  CONSTRAINT `FK_disciplina_curso_curso` FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id`)
+  CONSTRAINT `FK_disciplina_curso_curso` FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id`),
+  CONSTRAINT `FK_disciplina_curso_disciplina` FOREIGN KEY (`codigo_disciplina`) REFERENCES `disciplina` (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
--- Dumping data for table ooj4.disciplina_curso: ~0 rows (approximately)
+-- Dumping data for table ooj4.disciplina_curso: ~4 rows (approximately)
 /*!40000 ALTER TABLE `disciplina_curso` DISABLE KEYS */;
 INSERT INTO `disciplina_curso` (`codigo_disciplina`, `id_curso`) VALUES
 	(1, 1),
@@ -125,8 +141,13 @@ CREATE TABLE IF NOT EXISTS `resumo_notas` (
   `disciplina_id` int(11) unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
--- Dumping data for table ooj4.resumo_notas: ~0 rows (approximately)
+-- Dumping data for table ooj4.resumo_notas: ~4 rows (approximately)
 /*!40000 ALTER TABLE `resumo_notas` DISABLE KEYS */;
+INSERT INTO `resumo_notas` (`media`, `maior`, `menor`, `curso_id`, `disciplina_id`) VALUES
+	(5.58333, 7.5, 3.5, 1, 1),
+	(8.66667, 10, 7, 1, 2),
+	(8.56667, 9.8, 7.8, 2, 3),
+	(9.2, 9.9, 7.5, 2, 4);
 /*!40000 ALTER TABLE `resumo_notas` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
