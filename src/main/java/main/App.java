@@ -28,11 +28,13 @@ public class App
 //			}
 			
 //			ResumoNotas.calculaNotas();
-			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMediaComparator);
-			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMaiorComparator);
-			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMenorComparator);
-			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasDisciplinaComparator);
-			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasCursoComparator);
+//			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMediaComparator);
+//			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMaiorComparator);
+//			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMenorComparator);
+//			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasDisciplinaComparator);
+//			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasCursoComparator);
+//    		ResumoNotas.getCursosDisciplinasByNota(new Float("8.5"));
+    		ResumoNotas.getNotasDistinct();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

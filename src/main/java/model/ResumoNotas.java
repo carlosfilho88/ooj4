@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -58,7 +62,6 @@ public class ResumoNotas {
 	public void setCurso_id(Integer curso_id) {
 		this.curso_id = curso_id;
 	}
-	
 	public String toString() {
 		return "disciplina_id: " + getDisciplina_id() + ", curso_id: " + getCurso_id() + ", maior: " + getMaior() + ", menor: " + getMenor() + ", media: " + getMedia();
 	}
@@ -137,7 +140,88 @@ public class ResumoNotas {
 			stQuery.close();
 			conn.close();
 		}
+	}
 	
+	public static void getCursosDisciplinasByNota(Float media) throws SQLException {
+		DriverConnection driver = new DriverConnection();
+		PreparedStatement stQuery = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			driver.register();
+			conn = driver.getConnection();
+			String query = "SELECT * from resumo_notas where media = ?";
+			stQuery = (PreparedStatement) conn.prepareStatement(query);
+			stQuery.setFloat(1, media);
+			rs = stQuery.executeQuery();
+			
+			List<ResumoNotas> notas = new ArrayList<ResumoNotas>();
+			
+			while (!rs.wasNull() && rs.next()) {
+				notas.add(new ResumoNotas(rs.getFloat("maior"), rs.getFloat("menor"), rs.getFloat("media"), rs.getInt("disciplina_id"), rs.getInt("curso_id")));
+			}
+			stQuery.close();
+			rs.close();
+			rs = null;
+			System.out.println("-------- Disciplinas/curso com medias = " + media);
+			for (ResumoNotas n : notas) {
+				System.out.println(n);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			stQuery.close();
+			conn.close();
+		}
+	}
+	
+	public static void getNotasDistinct() throws SQLException {
+		DriverConnection driver = new DriverConnection();
+		PreparedStatement stQuery = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			driver.register();
+			conn = driver.getConnection();
+			String query = "SELECT * from resumo_notas";
+			stQuery = (PreparedStatement) conn.prepareStatement(query);
+			rs = stQuery.executeQuery();
+			List<ResumoNotas> notas = new ArrayList<ResumoNotas>();
+			Map<Float,ResumoNotas> medias = new Hashtable<Float,ResumoNotas>();
+			Map<Float,ResumoNotas> maiores = new Hashtable<Float,ResumoNotas>();
+			Map<Float,ResumoNotas> menores = new Hashtable<Float,ResumoNotas>();
+			
+			while (!rs.wasNull() && rs.next()) {
+				notas.add(new ResumoNotas(rs.getFloat("maior"), rs.getFloat("menor"), rs.getFloat("media"), rs.getInt("disciplina_id"), rs.getInt("curso_id")));
+			}
+			stQuery.close();
+			rs.close();
+			rs = null;
+			
+			for (ResumoNotas n : notas) {
+				medias.put(n.getMaior(), n);
+				menores.put(n.getMenor(), n);
+				maiores.put(n.getMaior(), n);
+			}
+			
+			System.out.println("-------- Notas médias diferentes --------");
+			for (Map.Entry<Float, ResumoNotas> entry : medias.entrySet()) {
+			    System.out.println(entry.getValue());
+			}
+			System.out.println("-------- Notas maiores diferentes --------");
+			for (Map.Entry<Float, ResumoNotas> entry : maiores.entrySet()) {
+			    System.out.println(entry.getValue());
+			}
+			System.out.println("-------- Notas menores diferentes --------");
+			for (Map.Entry<Float, ResumoNotas> entry : menores.entrySet()) {
+			    System.out.println(entry.getValue());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			stQuery.close();
+			conn.close();
+		}
 	}
 	
 	public Float compareTo(ResumoNotas nota) {
