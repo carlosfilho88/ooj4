@@ -27,7 +27,12 @@ public class App
 //				System.out.println(disciplina);
 //			}
 			
-			ResumoNotas.calculaNotas();
+//			ResumoNotas.calculaNotas();
+			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMediaComparator);
+			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMaiorComparator);
+			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasMenorComparator);
+			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasDisciplinaComparator);
+			ResumoNotas.sortByFieldName(ResumoNotas.ResumoNotasCursoComparator);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

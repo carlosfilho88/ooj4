@@ -3,7 +3,7 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -88,8 +88,8 @@ public class ResumoNotas {
 				stInsert.setFloat(1, rs.getFloat("maior"));
 				stInsert.setFloat(2, rs.getFloat("menor"));
 				stInsert.setFloat(3, rs.getFloat("media"));
-				stInsert.setFloat(4, rs.getFloat("disciplina_id"));
-				stInsert.setFloat(5, rs.getFloat("curso_id"));
+				stInsert.setFloat(4, rs.getInt("disciplina_id"));
+				stInsert.setFloat(5, rs.getInt("curso_id"));
 				affected_rows += stInsert.executeUpdate();
 			}
 			System.out.println("Registros atualizados: " + affected_rows);
@@ -106,10 +106,134 @@ public class ResumoNotas {
 		}
 	}
 	
-	public static <T> List<ResumoNotas> sortByFieldName(String fieldName) throws SQLException {
-		return null;
+	public static void sortByFieldName(Comparator<ResumoNotas> comparator) throws SQLException {
+		DriverConnection driver = new DriverConnection();
+		PreparedStatement stQuery = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			driver.register();
+			conn = driver.getConnection();
+			String query = "SELECT * from resumo_notas";
+			stQuery = (PreparedStatement) conn.prepareStatement(query);
+			rs = stQuery.executeQuery();
+			
+			ArrayList<ResumoNotas> notas = new ArrayList<ResumoNotas>();
+			
+			while (!rs.wasNull() && rs.next()) {
+				notas.add(new ResumoNotas(rs.getFloat("maior"), rs.getFloat("menor"), rs.getFloat("media"), rs.getInt("disciplina_id"), rs.getInt("curso_id")));
+			}
+			stQuery.close();
+			rs.close();
+			rs = null;
+			System.out.println("-------- Ordenação por " + comparator.toString() + " ASC ---------");
+			notas.sort(comparator);
+			for (ResumoNotas n : notas) {
+				System.out.println(n);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			stQuery.close();
+			conn.close();
+		}
 	
 	}
+	
+	public Float compareTo(ResumoNotas nota) {
+		Float n1 = ((ResumoNotas) nota).getMedia(); 
+		return this.getMedia() - n1;
+ 
+	}
+ 
+	public static Comparator<ResumoNotas> ResumoNotasMediaComparator = new Comparator<ResumoNotas>() {
+ 
+	    public int compare(ResumoNotas nota1, ResumoNotas nota2) {
+	      Float n1 = nota1.getMedia();
+	      Float n2 = nota2.getMedia();
+	      if(n1 < n2)
+	    	  return -1;
+	      else if(n1 > n2)
+	    	  return 1;
+	      return 0;
+	    }
+	    
+	    public String toString() {
+	    	return "media";
+	    }
+ 
+	};
+	
+	public static Comparator<ResumoNotas> ResumoNotasMaiorComparator = new Comparator<ResumoNotas>() {
+		 
+	    public int compare(ResumoNotas nota1, ResumoNotas nota2) {
+	      Float n1 = nota1.getMaior();
+	      Float n2 = nota2.getMaior();
+	      if(n1 < n2)
+	    	  return -1;
+	      else if(n1 > n2)
+	    	  return 1;
+	      return 0;
+	    }
+	    
+	    public String toString() {
+	    	return "maior";
+	    }
+ 
+	};
+	
+	public static Comparator<ResumoNotas> ResumoNotasMenorComparator = new Comparator<ResumoNotas>() {
+		 
+	    public int compare(ResumoNotas nota1, ResumoNotas nota2) {
+	      Float n1 = nota1.getMenor();
+	      Float n2 = nota2.getMenor();
+	      if(n1 < n2)
+	    	  return -1;
+	      else if(n1 > n2)
+	    	  return 1;
+	      return 0;
+	    }
+	    
+	    public String toString() {
+	    	return "menor";
+	    }
+ 
+	};
+	
+	public static Comparator<ResumoNotas> ResumoNotasDisciplinaComparator = new Comparator<ResumoNotas>() {
+		 
+	    public int compare(ResumoNotas nota1, ResumoNotas nota2) {
+	      Integer n1 = nota1.getDisciplina_id();
+	      Integer n2 = nota2.getDisciplina_id();
+	      if(n1 < n2)
+	    	  return -1;
+	      else if(n1 > n2)
+	    	  return 1;
+	      return 0;
+	    }
+	    public String toString() {
+	    	return "disciplina";
+	    }
+ 
+	};
+	
+	public static Comparator<ResumoNotas> ResumoNotasCursoComparator = new Comparator<ResumoNotas>() {
+		 
+	    public int compare(ResumoNotas nota1, ResumoNotas nota2) {
+	    	Integer n1 = nota1.getCurso_id();
+	    	Integer n2 = nota2.getCurso_id();
+	    	if(n1 < n2)
+		    	  return -1;
+		      else if( 1 > n2)
+		    	  return 1;
+		      return 0;
+	    }
+	    
+	    public String toString() {
+	    	return "curso";
+	    }
+ 
+	};
 	
 }
 
