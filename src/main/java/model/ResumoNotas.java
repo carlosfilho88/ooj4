@@ -208,10 +208,12 @@ public class ResumoNotas {
 			for (Map.Entry<Float, ResumoNotas> entry : medias.entrySet()) {
 			    System.out.println(entry.getValue());
 			}
+			System.out.println();
 			System.out.println("-------- Notas maiores diferentes --------");
 			for (Map.Entry<Float, ResumoNotas> entry : maiores.entrySet()) {
 			    System.out.println(entry.getValue());
 			}
+			System.out.println();
 			System.out.println("-------- Notas menores diferentes --------");
 			for (Map.Entry<Float, ResumoNotas> entry : menores.entrySet()) {
 			    System.out.println(entry.getValue());
